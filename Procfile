@@ -1,1 +1,1 @@
-web: gunicorn porfolio_edits.wsgi
+web: gunicorn portfolio_edits.wsgi
