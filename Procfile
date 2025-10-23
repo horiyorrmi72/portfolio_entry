@@ -1,0 +1,1 @@
+web: gunicorn porfolio_edits.wsgi
