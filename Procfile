@@ -1,1 +1,1 @@
-web: gunicorn portfolio_edits.wsgi --bind 0.0.0.0:$PORT
+web: gunicorn portfolio_edits.wsgi --bind 0.0.0.0:8000
