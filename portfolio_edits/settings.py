@@ -9,11 +9,15 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api	
+import dj_database_url
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--jaf6zna2thngxd9r+ew7ocubwg-6j#%j&3^52)-z__cp^fzb-'
+SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key__')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -51,9 +55,9 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,  
 }
 cloudinary.config( 
-  	cloud_name = "dmciyjxow",
-  	api_key = "969554296545498",
-  	api_secret = "TGUa184MD8FcBQzmu8-1vyX5lIc"
+  	cloud_name =os.getenv('CLOUDINRY_CLOUD_NAME'),
+  	api_key = os.getenv('CLOUDINARY_API_KEY'),
+  	api_secret = os.getenv('CLOUDINARY_API_SECRET')
 )
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
@@ -89,13 +93,17 @@ WSGI_APPLICATION = 'portfolio_edits.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {'default': dj_database_url.parse(DATABASE_URL)}
+else:
+     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+   
 
 
 # Password validation
@@ -133,6 +141,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
