@@ -12,4 +12,4 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput
 
-CMD ["gunicorn", "portfolio_edits.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["bash", "-c", "python manage.py migrate && python manage.py createsuperuser --noinput || true && gunicorn portfolio_edits.wsgi:application --bind 0.0.0.0:8000"]
